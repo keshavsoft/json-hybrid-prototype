@@ -1,0 +1,39 @@
+{
+  "tagName": "table",
+  "attributes": {
+    "class": "table table-hover table-striped align-middle border mb-0"
+  },
+  "children": [
+    {
+      "tagName": "thead",
+      "attributes": { "class": "table-light" },
+      "children": [
+        {
+          "tagName": "tr",
+          "children": [
+            { "tagName": "th", "textContent": "Name" },
+            { "tagName": "th", "textContent": "Amount", "attributes": { "class": "text-end" } }
+          ]
+        }
+      ]
+    },
+    {
+      "tagName": "tbody",
+      "children": [
+        {
+          "jsonToSpec": {
+            "operation": "iterate",
+            "source": "rows",
+            "template": {
+              "tagName": "tr",
+              "children": [
+                { "tagName": "td", "textContent": "${name}" },
+                { "tagName": "td", "textContent": "${amount}", "attributes": { "class": "text-end font-monospace" } }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

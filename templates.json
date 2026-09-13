@@ -1,0 +1,82 @@
+{
+  "customerForm": {
+    "title": "Customer Form",
+    "description": "Instruction-driven template form with external data",
+    "structure": {
+      "tagName": "div",
+      "attributes": {
+        "class": "card p-4"
+      },
+      "children": [
+        {
+          "tagName": "h3",
+          "textContent": "${header.title}"
+        },
+        {
+          "jsonToSpec": {
+            "operation": "iterate",
+            "source": "customers",
+            "template": {
+              "tagName": "div",
+              "attributes": {
+                "class": "border rounded p-2 mb-2"
+              },
+              "children": [
+                {
+                  "tagName": "strong",
+                  "textContent": "${name}"
+                },
+                {
+                  "tagName": "div",
+                  "textContent": "${role}"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "salesTable": {
+    "title": "Sales Table",
+    "description": "Iterative table template driven by external data",
+    "structure": {
+      "tagName": "table",
+      "attributes": {
+        "class": "table table-striped"
+      },
+      "children": [
+        {
+          "tagName": "thead",
+          "children": [
+            {
+              "tagName": "tr",
+              "children": [
+                { "tagName": "th", "textContent": "Name" },
+                { "tagName": "th", "textContent": "Amount" }
+              ]
+            }
+          ]
+        },
+        {
+          "tagName": "tbody",
+          "children": [
+            {
+              "jsonToSpec": {
+                "operation": "iterate",
+                "source": "rows",
+                "template": {
+                  "tagName": "tr",
+                  "children": [
+                    { "tagName": "td", "textContent": "${name}" },
+                    { "tagName": "td", "textContent": "${amount}" }
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

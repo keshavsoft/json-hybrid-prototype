@@ -1,0 +1,29 @@
+{
+  "name": "json-hybrid-runtime",
+  "version": "0.1.0",
+  "private": false,
+  "type": "module",
+  "main": "./index.js",
+  "module": "./src/index.js",
+  "exports": {
+    ".": {
+      "import": "./src/index.js",
+      "default": "./src/index.js"
+    }
+  },
+  "files": [
+    "src",
+    "index.js",
+    "docs",
+    "README.md"
+  ],
+  "scripts": {
+    "start": "node app.js",
+    "test": "node test/index.js",
+    "build": "vite build",
+    "dev": "vite"
+  },
+  "devDependencies": {
+    "vite": "^5.4.21"
+  }
+}
