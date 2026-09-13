@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>json-hybrid-prototype — Guarded Structure & Rendering</title>
+  <title>json-hybrid-prototype — The 4-Chapter Story</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
   <style>
     :root {
@@ -18,318 +18,392 @@
 
     body {
       margin: 0;
-      background: #f1f5f9;
+      background: #f8fafc;
       color: #0f172a;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     }
 
-    .app-header {
+    /* Navbar */
+    .app-navbar {
+      background: #0f172a;
+      border-bottom: 1px solid #334155;
+    }
+
+    /* Hero Header */
+    .hero-section {
       background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
       color: white;
-      border-radius: 12px;
-      padding: 24px;
-      margin-bottom: 24px;
-      box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.2);
+      border-radius: 16px;
+      padding: 36px 32px;
+      margin-bottom: 32px;
+      box-shadow: 0 10px 30px -5px rgba(15, 23, 42, 0.2);
     }
 
-    .card-panel {
+    /* Chapter Cards */
+    .story-card {
       background: white;
       border: 1px solid #e2e8f0;
-      border-radius: 12px;
-      box-shadow: 0 4px 16px rgba(15, 23, 42, 0.05);
-      overflow: hidden;
+      border-radius: 14px;
+      padding: 24px;
       height: 100%;
+      box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .story-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+    }
+
+    .chapter-num-badge {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-family: monospace;
+      display: inline-block;
+      margin-bottom: 12px;
+    }
+
+    /* Section Cards */
+    .portal-card {
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 14px;
+      padding: 20px;
+      height: 100%;
+      box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04);
       display: flex;
       flex-direction: column;
+      justify-content: space-between;
     }
 
-    .card-panel .card-header {
-      background: #f8fafc;
-      border-bottom: 1px solid #e2e8f0;
-      padding: 12px 18px;
-      font-weight: 600;
-      font-size: 0.95rem;
+    .portal-card:hover {
+      border-color: #38bdf8;
     }
 
-    .card-panel .card-body {
-      padding: 16px;
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-    }
-
-    pre.code-view {
+    /* Code Block */
+    pre.code-block {
       margin: 0;
-      padding: 14px;
+      padding: 16px;
       background: #0f172a;
       color: #38bdf8;
       font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-      font-size: 12px;
+      font-size: 13px;
       line-height: 1.5;
-      border-radius: 8px;
-      white-space: pre-wrap;
-      word-break: break-word;
-      max-height: 380px;
-      overflow-y: auto;
-    }
-
-    textarea.code-editor {
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-      font-size: 12px;
-      background: #0f172a;
-      color: #f8fafc;
-      border: 1px solid #334155;
-      border-radius: 8px;
-      padding: 12px;
-      width: 100%;
-      height: 200px;
-      resize: vertical;
-    }
-
-    #renderBox {
-      min-height: 250px;
-      padding: 16px;
-      background: #ffffff;
-      border: 1px dashed #cbd5e1;
-      border-radius: 8px;
+      border-radius: 10px;
+      overflow-x: auto;
     }
   </style>
 </head>
 
 <body>
-  <div class="container-fluid px-4 py-4" style="max-width: 1440px;">
-    
-    <!-- Top Header -->
-    <div class="app-header">
-      <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
-        <div>
-          <div class="d-flex align-items-center gap-2 mb-2">
-            <span class="badge bg-primary px-3 py-1.5 font-monospace">json-hybrid-prototype</span>
-            <a href="./docs/" class="badge bg-light text-dark text-decoration-none px-2 py-1">📚 Docs & CDN</a>
-            <a href="./tests/" class="badge bg-warning text-dark text-decoration-none px-2 py-1">Tests</a>
-            <a href="./tests/legacy/" class="badge bg-secondary text-decoration-none px-2 py-1">Legacy Tests (v1–v3)</a>
-          </div>
-          <h2 class="h4 fw-bold mb-1">Guarded Template Registry & End-to-End Compiler</h2>
-          <p class="text-secondary small mb-0 text-light opacity-75">
-            Supplying <code>structure.json</code> with pre-compilation guards, compiling via <code>json-to-spec</code>, rendering via <code>json-to-dom</code>.
-          </p>
-        </div>
-        <div class="d-flex align-items-center gap-3">
-          <div>
-            <label class="form-label text-light small mb-1 fw-semibold">Select Template Key:</label>
-            <select id="templateSelector" class="form-select form-select-sm" style="min-width: 220px;"></select>
-          </div>
-          <div class="d-flex gap-2 align-self-end">
-            <button id="btnCompile" class="btn btn-primary btn-sm px-3">Re-compile</button>
-            <button id="btnTriggerGuard" class="btn btn-outline-warning btn-sm px-3">Test Invalid Data</button>
-          </div>
-        </div>
-      </div>
-    </div>
 
-    <!-- Guard Status Banner -->
-    <div id="guardAlert" class="alert alert-success d-flex align-items-center py-2 px-3 mb-4 shadow-sm" role="alert">
-      <span class="fw-bold me-2">🛡️ Guard Status:</span>
-      <span id="guardStatusText">All checks passed. Key verified, structure valid, data contract satisfied.</span>
-    </div>
-
-    <!-- Main 3-Column Layout -->
-    <div class="row g-3 mb-4">
+  <!-- 1. Top Navbar / Menu -->
+  <nav class="navbar navbar-expand-lg navbar-dark app-navbar py-2 px-3 sticky-top">
+    <div class="container-fluid" style="max-width: 1280px;">
+      <a class="navbar-brand d-flex align-items-center gap-2" href="./">
+        <span class="fs-5">🛡️</span>
+        <span class="fw-bold">json-hybrid-prototype</span>
+        <span class="badge bg-primary ms-1" style="font-size: 0.7rem;">v4 Story-Driven</span>
+      </a>
       
-      <!-- Column 1: Supplied Structure (HOW) -->
-      <div class="col-lg-4">
-        <div class="card-panel">
-          <div class="card-header d-flex justify-content-between align-items-center">
-            <span>1. Supplied <code>structure.json</code> (HOW)</span>
-            <span class="badge bg-secondary font-monospace" id="structureTagBadge">tag: div</span>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navMenu">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-3">
+          <li class="nav-item">
+            <a class="nav-link active fw-semibold" href="./">📖 Story Overview</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-light" href="./explorer/">🔬 Story Explorer</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle text-light" href="#" role="button" data-bs-toggle="dropdown">
+              🧪 Tests Menu
+            </a>
+            <ul class="dropdown-menu shadow">
+              <li><h6 class="dropdown-header text-uppercase small">Current Test Suites</h6></li>
+              <li><a class="dropdown-item" href="./tests/customerForm/">1. Customer Form</a></li>
+              <li><a class="dropdown-item" href="./tests/salesTable/">2. Sales Table</a></li>
+              <li><a class="dropdown-item" href="./tests/voucherDirectory/">3. Voucher Directory</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item fw-semibold text-primary" href="./tests/">📁 All Tests Portal</a></li>
+              <li><a class="dropdown-item text-secondary small" href="./tests/legacy/">📁 Legacy Tests (v1, v2, v3)</a></li>
+            </ul>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-light" href="#entryPointSection">🚀 Entry Point API</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-light" href="./docs/">📚 Docs / CDN</a>
+          </li>
+        </ul>
+
+        <div class="d-flex align-items-center gap-2">
+          <a href="./docs/" class="btn btn-outline-info btn-sm">
+            🌐 Live Docs
+          </a>
+          <a href="https://github.com/keshavsoft/json-hybrid-prototype" target="_blank" class="btn btn-outline-light btn-sm">
+            🐙 GitHub
+          </a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container py-4" style="max-width: 1280px;">
+    
+    <!-- 2. Hero Header -->
+    <div class="hero-section">
+      <div class="row align-items-center g-4">
+        <div class="col-lg-8">
+          <span class="badge bg-primary font-monospace mb-2 px-3 py-1.5">v4 Story-Driven Architecture</span>
+          <h1 class="display-6 fw-bold mb-2">The Story of a Data-Driven UI</h1>
+          <p class="text-light opacity-75 fs-6 mb-4" style="max-width: 680px;">
+            A declarative UI pipeline connecting guarded <code>structure.json</code> blueprints (HOW) with dynamic data (WHAT), compiling via <code>json-to-spec</code>, and materializing into living DOM via <code>json-to-dom</code>.
+          </p>
+          <div class="d-flex flex-wrap gap-2">
+            <a href="./explorer/" class="btn btn-primary px-4 fw-semibold">
+              🔬 Open Story Explorer &rarr;
+            </a>
+            <a href="./tests/" class="btn btn-outline-warning px-4 fw-semibold">
+              🧪 View Test Suites &rarr;
+            </a>
+            <a href="#entryPointSection" class="btn btn-outline-light px-3">
+              🚀 Entry Point Guide
+            </a>
           </div>
-          <div class="card-body">
-            <p class="small text-muted mb-2">Retrieved via <code>getStructure({ inKey })</code> with integrity guards.</p>
-            <pre id="structureBox" class="code-view flex-grow-1">Loading structure...</pre>
+        </div>
+        <div class="col-lg-4 text-center d-none d-lg-block">
+          <div class="p-3 bg-dark bg-opacity-50 rounded-4 border border-secondary border-opacity-25 text-start">
+            <div class="text-muted small mb-2 fw-semibold">THE 4-CHAPTER JOURNEY</div>
+            <div class="d-flex flex-column gap-2 small">
+              <div><span class="badge bg-primary me-2">Ch. 1</span> <strong>Identity:</strong> "Who are you?"</div>
+              <div><span class="badge bg-warning text-dark me-2">Ch. 2</span> <strong>The Gatekeeper:</strong> "Are you worthy?"</div>
+              <div><span class="badge bg-info text-dark me-2">Ch. 3</span> <strong>Transformation:</strong> Structure + Data -> Spec</div>
+              <div><span class="badge bg-success me-2">Ch. 4</span> <strong>Realization:</strong> Spec -> Living DOM</div>
+            </div>
           </div>
         </div>
       </div>
+    </div>
 
-      <!-- Column 2: Data Payload (WHAT) & Compiled Spec -->
-      <div class="col-lg-4">
-        <div class="card-panel">
-          <div class="card-header d-flex justify-content-between align-items-center">
-            <span>2. Data Payload & Spec</span>
-            <span class="badge bg-info text-dark font-monospace">WHAT & Spec</span>
+    <!-- 3. Small Story: The 4 Chapters Overview -->
+    <div class="mb-5">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+          <h2 class="h4 fw-bold text-dark mb-1">📖 The 4 Chapters</h2>
+          <p class="text-muted small mb-0">The narrative lifecycle of turning JSON blueprints into living DOM.</p>
+        </div>
+        <a href="./explorer/" class="btn btn-outline-primary btn-sm">Interactive Explorer &rarr;</a>
+      </div>
+
+      <div class="row g-3">
+        
+        <!-- Chapter 1 -->
+        <div class="col-lg-3 col-md-6">
+          <div class="story-card">
+            <span class="chapter-num-badge bg-primary text-white">CHAPTER 1</span>
+            <h5 class="fw-bold text-dark mb-2">Identity</h5>
+            <p class="text-muted small mb-3">
+              <em>"Who are you?"</em> Resolves the blueprint from the catalog by <code>templateKey</code> and validates its existence.
+            </p>
+            <ul class="list-unstyled small text-secondary mb-0">
+              <li>&bull; Curated blueprint catalog</li>
+              <li>&bull; Key existence verification</li>
+              <li>&bull; Declarative HOW blueprint</li>
+            </ul>
           </div>
-          <div class="card-body">
-            <label class="form-label small fw-semibold text-secondary mb-1">Input <code>data.json</code> (Editable):</label>
-            <textarea id="dataEditor" class="code-editor mb-3"></textarea>
+        </div>
 
-            <label class="form-label small fw-semibold text-secondary mb-1">Compiled <code>spec.json</code> (Ready for DOM):</label>
-            <pre id="specBox" class="code-view flex-grow-1" style="color: #4ade80;">Waiting for compilation...</pre>
+        <!-- Chapter 2 -->
+        <div class="col-lg-3 col-md-6">
+          <div class="story-card">
+            <span class="chapter-num-badge bg-warning text-dark">CHAPTER 2</span>
+            <h5 class="fw-bold text-dark mb-2">The Gatekeeper</h5>
+            <p class="text-muted small mb-3">
+              <em>"Are you worthy to enter?"</em> Validates data payload against required contract keys/arrays and guards blueprint schema.
+            </p>
+            <ul class="list-unstyled small text-secondary mb-0">
+              <li>&bull; Required key & array guards</li>
+              <li>&bull; Void tag (&lt;input&gt;, &lt;img&gt;) guard</li>
+              <li>&bull; Pre-compilation rejection</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Chapter 3 -->
+        <div class="col-lg-3 col-md-6">
+          <div class="story-card">
+            <span class="chapter-num-badge bg-info text-dark">CHAPTER 3</span>
+            <h5 class="fw-bold text-dark mb-2">Transformation</h5>
+            <p class="text-muted small mb-3">
+              Compiles the guarded blueprint and dynamic data into pure Spec JSON via <code>json-to-spec v3</code>.
+            </p>
+            <ul class="list-unstyled small text-secondary mb-0">
+              <li>&bull; HOW (structure) + WHAT (data)</li>
+              <li>&bull; Iterations & string interpolations</li>
+              <li>&bull; Pure Spec JSON output</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Chapter 4 -->
+        <div class="col-lg-3 col-md-6">
+          <div class="story-card">
+            <span class="chapter-num-badge bg-success text-white">CHAPTER 4</span>
+            <h5 class="fw-bold text-dark mb-2">Realization</h5>
+            <p class="text-muted small mb-3">
+              Breathes life into Spec JSON by constructing living interactive DOM elements via <code>json-to-dom v27</code>.
+            </p>
+            <ul class="list-unstyled small text-secondary mb-0">
+              <li>&bull; Pure DOM materialization</li>
+              <li>&bull; Event & action attachments</li>
+              <li>&bull; Mounts directly to <code>targetHtmlId</code></li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- 4. Clean Outside Entry Point API -->
+    <div id="entryPointSection" class="card border rounded-4 shadow-sm bg-white p-4 mb-5">
+      <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
+        <div>
+          <span class="badge bg-primary font-monospace mb-1">Clean Caller API</span>
+          <h3 class="h4 fw-bold mb-0 text-dark">The Outside Entry Point</h3>
+          <p class="text-muted small mb-0">Strictly 3 self-documenting parameters with zero <code>in-</code> prefixes:</p>
+        </div>
+        <a href="./docs/hybrid-runtime.js" target="_blank" class="btn btn-outline-secondary btn-sm">View Compiled Bundle</a>
+      </div>
+
+      <pre class="code-block mb-3">
+import { renderTemplate } from "./src/v4/index.js";
+// Or via CDN:
+// import { renderTemplate } from "https://keshavsoft.github.io/json-hybrid-prototype/hybrid-runtime.js";
+
+// Sample Data matching the blueprint contract
+const data = {
+  header: { title: "Customer Directory" },
+  customers: [
+    { name: "Asha Sharma", role: "Principal Architect" },
+    { name: "Karthik Verma", role: "Frontend Lead" }
+  ]
+};
+
+// Orchestrates all 4 chapters and mounts directly into &lt;div id="app"&gt;&lt;/div&gt;
+renderTemplate({
+  templateKey: "customerForm",
+  dataAsJson: data,
+  targetHtmlId: "app"
+});</pre>
+
+      <div class="row g-3 mt-1">
+        <div class="col-md-4">
+          <div class="p-3 bg-light rounded border">
+            <h6 class="fw-bold text-primary mb-1">1. Compile to Spec JSON</h6>
+            <p class="small text-muted mb-0">Execute Chapters 1 to 3 to produce Spec JSON without mounting:</p>
+            <code class="small text-dark d-block mt-1">compileTemplate({ templateKey, dataAsJson })</code>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="p-3 bg-light rounded border">
+            <h6 class="fw-bold text-primary mb-1">2. Supply Blueprint</h6>
+            <p class="small text-muted mb-0">Supply pure guarded structure blueprint (Chapters 1 & 2):</p>
+            <code class="small text-dark d-block mt-1">getStructure({ templateKey })</code>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="p-3 bg-light rounded border">
+            <h6 class="fw-bold text-primary mb-1">3. Discover Catalog</h6>
+            <p class="small text-muted mb-0">Discover registered blueprints and metadata:</p>
+            <code class="small text-dark d-block mt-1">listTemplates()</code>
           </div>
         </div>
       </div>
+    </div>
 
-      <!-- Column 3: Rendered DOM -->
-      <div class="col-lg-4">
-        <div class="card-panel">
-          <div class="card-header d-flex justify-content-between align-items-center">
-            <span>3. Rendered DOM Output</span>
-            <span class="badge bg-success font-monospace">json-to-dom v27</span>
-          </div>
-          <div class="card-body">
-            <p class="small text-muted mb-2">Constructed from compiled spec via <code>buildSpecElement({ inSpec })</code>.</p>
-            <div id="renderBox" class="flex-grow-1"></div>
-          </div>
+    <!-- 5. Connected Tests Folders & Dedicated Pages Grid -->
+    <div class="mb-4">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+          <h2 class="h4 fw-bold text-dark mb-1">🧪 Connected Test Suites</h2>
+          <p class="text-muted small mb-0">Dedicated test pages consuming the library with zero UI clutter.</p>
         </div>
+        <a href="./tests/" class="btn btn-outline-primary btn-sm">All Tests &rarr;</a>
       </div>
 
+      <div class="row g-3">
+        
+        <!-- Customer Form Test -->
+        <div class="col-lg-4 col-md-6">
+          <div class="portal-card">
+            <div>
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <span class="badge bg-primary">Test 1</span>
+                <span class="text-muted small font-monospace">tests/customerForm/</span>
+              </div>
+              <h5 class="fw-bold text-dark mb-1">Customer Form</h5>
+              <p class="text-muted small mb-3">
+                Instruction-driven customer directory with role badges and iteration.
+              </p>
+            </div>
+            <a href="./tests/customerForm/" class="btn btn-outline-primary btn-sm w-100">
+              Open Customer Form Test &rarr;
+            </a>
+          </div>
+        </div>
+
+        <!-- Sales Table Test -->
+        <div class="col-lg-4 col-md-6">
+          <div class="portal-card">
+            <div>
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <span class="badge bg-info text-dark">Test 2</span>
+                <span class="text-muted small font-monospace">tests/salesTable/</span>
+              </div>
+              <h5 class="fw-bold text-dark mb-1">Sales Table</h5>
+              <p class="text-muted small mb-3">
+                Striped data table with right-aligned currency values.
+              </p>
+            </div>
+            <a href="./tests/salesTable/" class="btn btn-outline-primary btn-sm w-100">
+              Open Sales Table Test &rarr;
+            </a>
+          </div>
+        </div>
+
+        <!-- Voucher Directory Test -->
+        <div class="col-lg-4 col-md-6">
+          <div class="portal-card">
+            <div>
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <span class="badge bg-warning text-dark">Test 3</span>
+                <span class="text-muted small font-monospace">tests/voucherDirectory/</span>
+              </div>
+              <h5 class="fw-bold text-dark mb-1">Voucher Directory</h5>
+              <p class="text-muted small mb-3">
+                Multi-component layout: Filter Toolbar, Table with totals, and Detail Form.
+              </p>
+            </div>
+            <a href="./tests/voucherDirectory/" class="btn btn-outline-primary btn-sm w-100">
+              Open Voucher Directory Test &rarr;
+            </a>
+          </div>
+        </div>
+
+      </div>
     </div>
 
   </div>
 
-  <!-- json-to-spec & json-to-dom from official CDN -->
-  <script type="module">
-    import { compile } from "https://keshavsoft.github.io/json-to-spec/dist/v3/min.js";
-    import { buildSpecElement } from "https://keshavsoft.github.io/json-to-dom/dist/v27/min.js";
-    import {
-      listTemplates,
-      getStructure,
-      compileTemplate,
-      renderTemplate
-    } from "./src/v1/index.js";
-
-    const sampleDatasets = {
-      customerForm: {
-        header: { title: "Customer Directory" },
-        customers: [
-          { name: "Asha Sharma", role: "Principal Architect" },
-          { name: "Karthik Verma", role: "Frontend Lead" },
-          { name: "Sneha Reddy", role: "Systems Engineer" }
-        ]
-      },
-      salesTable: {
-        rows: [
-          { name: "ThinkPad X1 Carbon", amount: "1,450" },
-          { name: "Dell UltraSharp 32\"", amount: "820" },
-          { name: "Logitech MX Master 3S", amount: "99" }
-        ]
-      },
-      voucherDirectory: {
-        toolbar: {
-          title: "September Vouchers",
-          statusOptions: [
-            { text: "All Statuses", value: "" },
-            { text: "Approved", value: "Approved" },
-            { text: "Pending", value: "Pending" }
-          ]
-        },
-        summary: { totalCount: 3, totalAmount: "14,500" },
-        tableColumns: [
-          { title: "Voucher #", field: "voucherNo", isVisible: true, value: "VCH-2026-001" },
-          { title: "Date", field: "voucherDate", isVisible: true, value: "2026-09-13" },
-          { title: "Party Name", field: "partyName", isVisible: true, value: "Nexus Tech" },
-          { title: "Amount (₹)", field: "amount", isVisible: true, value: "6,200" },
-          { title: "Status", field: "status", isVisible: true, value: "Approved" }
-        ],
-        tableRows: [
-          { voucherNo: "VCH-2026-001", voucherDate: "2026-09-13", partyName: "Nexus Tech", amount: "6,200", status: "Approved" },
-          { voucherNo: "VCH-2026-002", voucherDate: "2026-09-12", partyName: "Apex Logistics", amount: "4,800", status: "Pending" },
-          { voucherNo: "VCH-2026-003", voucherDate: "2026-09-11", partyName: "Zeta Systems", amount: "3,500", status: "Approved" }
-        ],
-        formColumns: [
-          { title: "Voucher #", field: "voucherNo", inputType: "text", isVisible: true },
-          { title: "Voucher Date", field: "voucherDate", inputType: "date", isVisible: true },
-          { title: "Party Name", field: "partyName", inputType: "text", isVisible: true },
-          { title: "Amount", field: "amount", inputType: "number", isVisible: true }
-        ]
-      }
-    };
-
-    const templateSelector = document.getElementById("templateSelector");
-    const structureBox = document.getElementById("structureBox");
-    const dataEditor = document.getElementById("dataEditor");
-    const specBox = document.getElementById("specBox");
-    const renderBox = document.getElementById("renderBox");
-    const guardAlert = document.getElementById("guardAlert");
-    const guardStatusText = document.getElementById("guardStatusText");
-    const structureTagBadge = document.getElementById("structureTagBadge");
-    const btnCompile = document.getElementById("btnCompile");
-    const btnTriggerGuard = document.getElementById("btnTriggerGuard");
-
-    // Populate template selector
-    const templates = listTemplates();
-    templates.forEach(t => {
-      const opt = document.createElement("option");
-      opt.value = t.key;
-      opt.textContent = `${t.title} (${t.key})`;
-      templateSelector.appendChild(opt);
-    });
-
-    const setGuardState = (isValid, message) => {
-      if (isValid) {
-        guardAlert.className = "alert alert-success d-flex align-items-center py-2 px-3 mb-4 shadow-sm";
-        guardStatusText.innerHTML = `<strong>🛡️ Guard Passed:</strong> ${message}`;
-      } else {
-        guardAlert.className = "alert alert-danger d-flex align-items-center py-2 px-3 mb-4 shadow-sm";
-        guardStatusText.innerHTML = `<strong>⚠️ Guard Blocked Compilation:</strong> ${message}`;
-      }
-    };
-
-    const renderCurrentSelection = () => {
-      const key = templateSelector.value;
-      
-      try {
-        // 1. Supply structure with guard
-        const structure = getStructure({ inKey: key });
-        structureBox.textContent = JSON.stringify(structure, null, 2);
-        structureTagBadge.textContent = Array.isArray(structure) ? `Array[${structure.length}]` : `<${structure.tagName}>`;
-
-        // 2. Load data
-        let inputData;
-        try {
-          inputData = JSON.parse(dataEditor.value);
-        } catch (parseErr) {
-          setGuardState(false, `Invalid JSON syntax in data editor: ${parseErr.message}`);
-          return;
-        }
-
-        // 3. Compile with guards
-        const spec = compileTemplate({ inKey: key, inData: inputData, inCompile: compile });
-        specBox.textContent = JSON.stringify(spec, null, 2);
-
-        // 4. Render to DOM
-        renderBox.innerHTML = "";
-        const domNode = renderTemplate({
-          inKey: key,
-          inData: inputData,
-          inCompile: compile,
-          inBuildSpecElement: buildSpecElement,
-          inTargetContainerId: "renderBox"
-        });
-        setGuardState(true, `Template "${key}" compiled and rendered with all contracts satisfied.`);
-      } catch (err) {
-        specBox.textContent = `Compilation Error: ${err.message}`;
-        renderBox.innerHTML = `<div class="text-danger small p-3 bg-danger-subtle rounded">Renderer halted by guard: ${err.message}</div>`;
-        setGuardState(false, err.message);
-      }
-    };
-
-    const onTemplateChange = () => {
-      const key = templateSelector.value;
-      dataEditor.value = JSON.stringify(sampleDatasets[key] || {}, null, 2);
-      renderCurrentSelection();
-    };
-
-    templateSelector.addEventListener("change", onTemplateChange);
-    btnCompile.addEventListener("click", renderCurrentSelection);
-
-    btnTriggerGuard.addEventListener("click", () => {
-      // Intentionally provide invalid data payload to trigger contract guard
-      dataEditor.value = JSON.stringify({ invalidKey: "Testing Guard Rejection" }, null, 2);
-      renderCurrentSelection();
-    });
-
-    // Initialize with first template
-    onTemplateChange();
-  </script>
+  <!-- Bootstrap Bundle with Popper -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>

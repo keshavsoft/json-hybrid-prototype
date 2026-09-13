@@ -92,9 +92,10 @@ const templates = listTemplates();
 
 ## 🌐 Live GitHub Pages & CDN Documentation
 
-The test suite and interactive compiler are published to GitHub Pages and run purely via CDN:
+The documentation, interactive explorer, and test suites are published to GitHub Pages and run purely via CDN:
 
-- **Interactive Explorer (Live)**: [https://keshavsoft.github.io/json-hybrid-prototype/](https://keshavsoft.github.io/json-hybrid-prototype/)
+- **Documentation Landing Page (Live)**: [https://keshavsoft.github.io/json-hybrid-prototype/](https://keshavsoft.github.io/json-hybrid-prototype/)
+- **Interactive Story Explorer (Live)**: [https://keshavsoft.github.io/json-hybrid-prototype/explorer/](https://keshavsoft.github.io/json-hybrid-prototype/explorer/)
 - **Tests Suite (Live CDN)**: [https://keshavsoft.github.io/json-hybrid-prototype/tests/](https://keshavsoft.github.io/json-hybrid-prototype/tests/)
   - Customer Form: [https://keshavsoft.github.io/json-hybrid-prototype/tests/customerForm/](https://keshavsoft.github.io/json-hybrid-prototype/tests/customerForm/)
   - Sales Table: [https://keshavsoft.github.io/json-hybrid-prototype/tests/salesTable/](https://keshavsoft.github.io/json-hybrid-prototype/tests/salesTable/)
@@ -111,10 +112,12 @@ Run the local development server:
 npx serve
 ```
 
-Then visit the suites in your browser:
+Then visit the pages in your browser:
 
-- **Interactive Explorer (Root)**: `http://localhost:3000/`
-- **Docs & CDN Interactive Explorer**: `http://localhost:3000/docs/`
+- **Landing Page (Root)**: `http://localhost:3000/`
+- **Interactive Explorer (Root)**: `http://localhost:3000/explorer/`
+- **Docs Landing Page**: `http://localhost:3000/docs/`
+- **Docs Explorer**: `http://localhost:3000/docs/explorer/`
 - **Tests Suite**: `http://localhost:3000/tests/`
   - Customer Form: `http://localhost:3000/tests/customerForm/`
   - Sales Table: `http://localhost:3000/tests/salesTable/`

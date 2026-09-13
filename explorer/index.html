@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>json-hybrid-prototype — Interactive Story Explorer</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0f172a;
+      --panel: #1e293b;
+      --panel-border: #334155;
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --accent: #38bdf8;
+    }
+
+    body {
+      margin: 0;
+      background: #f8fafc;
+      color: #0f172a;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    .app-navbar {
+      background: #0f172a;
+      border-bottom: 1px solid #334155;
+    }
+
+    .app-hero {
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      color: white;
+      border-radius: 14px;
+      padding: 22px;
+      margin-bottom: 20px;
+      box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.15);
+    }
+
+    .chapter-card {
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04);
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .chapter-card .card-header {
+      background: #f8fafc;
+      border-bottom: 1px solid #e2e8f0;
+      padding: 12px 16px;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    .chapter-card .card-body {
+      padding: 14px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    pre.code-view {
+      margin: 0;
+      padding: 12px;
+      background: #0f172a;
+      color: #38bdf8;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 11.5px;
+      line-height: 1.45;
+      border-radius: 8px;
+      white-space: pre-wrap;
+      word-break: break-word;
+      max-height: 320px;
+      overflow-y: auto;
+    }
+
+    textarea.code-editor {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 11.5px;
+      background: #0f172a;
+      color: #f8fafc;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      padding: 10px;
+      width: 100%;
+      height: 180px;
+      resize: vertical;
+    }
+
+    #renderBox {
+      min-height: 240px;
+      padding: 16px;
+      background: #ffffff;
+      border: 1px dashed #cbd5e1;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Top Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark app-navbar py-2 px-3 mb-3">
+    <div class="container-fluid" style="max-width: 1440px;">
+      <a class="navbar-brand d-flex align-items-center gap-2" href="../">
+        <span>🛡️</span>
+        <span>json-hybrid-prototype</span>
+        <span class="badge bg-primary ms-1" style="font-size: 0.7rem;">Interactive Explorer</span>
+      </a>
+      
+      <div class="d-flex align-items-center gap-2">
+        <a href="../" class="btn btn-outline-light btn-sm">&larr; Back to Home</a>
+        <a href="../tests/" class="btn btn-outline-warning btn-sm">🧪 Tests Suite</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container-fluid px-4 py-2" style="max-width: 1440px;">
+    
+    <!-- Hero Header -->
+    <div class="app-hero">
+      <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+        <div>
+          <span class="badge bg-info text-dark font-monospace mb-2 px-3 py-1">Interactive 4-Chapter Explorer</span>
+          <h1 class="h4 fw-bold mb-1">Guarded Blueprint & Compilation Inspector</h1>
+          <p class="text-light opacity-75 small mb-0">
+            Inspect declarative blueprints, test Gatekeeper contract rejections, and observe real-time compilation into living DOM.
+          </p>
+        </div>
+
+        <div class="d-flex align-items-center gap-2 flex-wrap">
+          <div>
+            <label class="form-label text-light small mb-1 fw-semibold">Select Blueprint:</label>
+            <select id="templateSelector" class="form-select form-select-sm" style="min-width: 220px;"></select>
+          </div>
+          <div class="d-flex gap-2 align-self-end">
+            <button id="btnCompile" class="btn btn-primary btn-sm px-3 fw-semibold">▶️ Re-compile</button>
+            <button id="btnTriggerGuard" class="btn btn-outline-warning btn-sm px-3">🛡️ Test Gatekeeper</button>
+            <button id="btnResetData" class="btn btn-outline-light btn-sm px-2">🔄 Reset</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Gatekeeper Status Banner -->
+    <div id="guardAlert" class="alert alert-success d-flex align-items-center py-2 px-3 mb-3 shadow-sm" role="alert">
+      <span class="fw-bold me-2">🛡️ Gatekeeper Status:</span>
+      <span id="guardStatusText">All checks passed. Blueprint key verified, structure valid, data contract satisfied.</span>
+    </div>
+
+    <!-- 4-Chapter Grid -->
+    <div class="row g-3 mb-4">
+      
+      <!-- Ch. 1: Identity -->
+      <div class="col-lg-3 col-md-6">
+        <div class="chapter-card">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <span><strong>Ch. 1:</strong> Identity (HOW)</span>
+            <span class="badge bg-primary font-monospace" id="structureTagBadge">tag: div</span>
+          </div>
+          <div class="card-body">
+            <p class="small text-muted mb-2">Guarded blueprint from catalog:</p>
+            <pre id="structureBox" class="code-view flex-grow-1">Loading blueprint...</pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ch. 2: Gatekeeper -->
+      <div class="col-lg-3 col-md-6">
+        <div class="chapter-card">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <span><strong>Ch. 2:</strong> The Gatekeeper</span>
+            <span class="badge bg-warning text-dark font-monospace" id="guardBadge">Contract Guard</span>
+          </div>
+          <div class="card-body">
+            <p class="small text-muted mb-2">Required contract paths:</p>
+            <div id="guardRuleBox" class="p-2 mb-2 bg-light border rounded small font-monospace" style="font-size: 11px;">
+              Keys: <span id="requiredKeysText">-</span><br />
+              Arrays: <span id="requiredArraysText">-</span>
+            </div>
+            <label class="form-label small fw-semibold text-secondary mb-1">Input <code>data.json</code> (Editable):</label>
+            <textarea id="dataEditor" class="code-editor flex-grow-1"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ch. 3: Transformation -->
+      <div class="col-lg-3 col-md-6">
+        <div class="chapter-card">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <span><strong>Ch. 3:</strong> Transformation</span>
+            <span class="badge bg-info text-dark font-monospace">json-to-spec</span>
+          </div>
+          <div class="card-body">
+            <p class="small text-muted mb-2">Compiled pure Spec JSON:</p>
+            <pre id="specBox" class="code-view flex-grow-1" style="color: #4ade80;">Waiting for transformation...</pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ch. 4: Realization -->
+      <div class="col-lg-3 col-md-6">
+        <div class="chapter-card">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <span><strong>Ch. 4:</strong> Realization</span>
+            <span class="badge bg-success font-monospace">json-to-dom</span>
+          </div>
+          <div class="card-body">
+            <p class="small text-muted mb-2">Constructed living DOM:</p>
+            <div id="renderBox" class="flex-grow-1"></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.bundle.min.js"></script>
+
+  <script type="module">
+    import { renderTemplate, compileTemplate, getStructure, listTemplates } from "../src/v4/index.js";
+
+    const sampleDatasets = {
+      customerForm: {
+        header: { title: "Customer Directory" },
+        customers: [
+          { name: "Asha Sharma", role: "Principal Architect" },
+          { name: "Karthik Verma", role: "Frontend Lead" },
+          { name: "Sneha Reddy", role: "Systems Engineer" }
+        ]
+      },
+      salesTable: {
+        rows: [
+          { name: "ThinkPad X1 Carbon", amount: "1,450" },
+          { name: "Dell UltraSharp 32\"", amount: "820" },
+          { name: "Logitech MX Master 3S", amount: "99" }
+        ]
+      },
+      voucherDirectory: {
+        toolbar: {
+          title: "September Vouchers",
+          statusOptions: [
+            { text: "All Statuses", value: "" },
+            { text: "Approved", value: "Approved" },
+            { text: "Pending", value: "Pending" }
+          ]
+        },
+        summary: { totalCount: 3, totalAmount: "14,500" },
+        tableColumns: [
+          { title: "Voucher #", field: "voucherNo", isVisible: true, value: "VCH-2026-001" },
+          { title: "Date", field: "voucherDate", isVisible: true, value: "2026-09-13" },
+          { title: "Party Name", field: "partyName", isVisible: true, value: "Nexus Tech" },
+          { title: "Amount (₹)", field: "amount", isVisible: true, value: "6,200" },
+          { title: "Status", field: "status", isVisible: true, value: "Approved" }
+        ],
+        tableRows: [
+          { voucherNo: "VCH-2026-001", voucherDate: "2026-09-13", partyName: "Nexus Tech", amount: "6,200", status: "Approved" },
+          { voucherNo: "VCH-2026-002", voucherDate: "2026-09-12", partyName: "Apex Logistics", amount: "4,800", status: "Pending" },
+          { voucherNo: "VCH-2026-003", voucherDate: "2026-09-11", partyName: "Zeta Systems", amount: "3,500", status: "Approved" }
+        ],
+        formColumns: [
+          { title: "Voucher #", field: "voucherNo", inputType: "text", isVisible: true },
+          { title: "Voucher Date", field: "voucherDate", inputType: "date", isVisible: true },
+          { title: "Party Name", field: "partyName", inputType: "text", isVisible: true },
+          { title: "Amount", field: "amount", inputType: "number", isVisible: true }
+        ]
+      }
+    };
+
+    const templateSelector = document.getElementById("templateSelector");
+    const structureBox = document.getElementById("structureBox");
+    const dataEditor = document.getElementById("dataEditor");
+    const specBox = document.getElementById("specBox");
+    const renderBox = document.getElementById("renderBox");
+    const guardAlert = document.getElementById("guardAlert");
+    const guardStatusText = document.getElementById("guardStatusText");
+    const structureTagBadge = document.getElementById("structureTagBadge");
+    const requiredKeysText = document.getElementById("requiredKeysText");
+    const requiredArraysText = document.getElementById("requiredArraysText");
+    const btnCompile = document.getElementById("btnCompile");
+    const btnTriggerGuard = document.getElementById("btnTriggerGuard");
+    const btnResetData = document.getElementById("btnResetData");
+
+    const templates = listTemplates();
+    templates.forEach(t => {
+      const opt = document.createElement("option");
+      opt.value = t.key;
+      opt.textContent = `${t.title} (${t.key})`;
+      templateSelector.appendChild(opt);
+    });
+
+    const setGuardState = (isValid, message) => {
+      if (isValid) {
+        guardAlert.className = "alert alert-success d-flex align-items-center py-2 px-3 mb-3 shadow-sm";
+        guardStatusText.innerHTML = `<strong>🛡️ Gatekeeper Passed:</strong> ${message}`;
+      } else {
+        guardAlert.className = "alert alert-danger d-flex align-items-center py-2 px-3 mb-3 shadow-sm";
+        guardStatusText.innerHTML = `<strong>⚠️ Gatekeeper Blocked:</strong> ${message}`;
+      }
+    };
+
+    const renderCurrentSelection = () => {
+      const key = templateSelector.value;
+      
+      try {
+        const structure = getStructure({ templateKey: key });
+        structureBox.textContent = JSON.stringify(structure, null, 2);
+        structureTagBadge.textContent = Array.isArray(structure) ? `Array[${structure.length}]` : `<${structure.tagName}>`;
+
+        const templateInfo = templates.find(t => t.key === key);
+        if (templateInfo && templateInfo.guard) {
+          requiredKeysText.textContent = (templateInfo.guard.requiredKeys || []).join(", ") || "None";
+          requiredArraysText.textContent = (templateInfo.guard.requiredArrays || []).join(", ") || "None";
+        }
+
+        let inputData;
+        try {
+          inputData = JSON.parse(dataEditor.value);
+        } catch (parseErr) {
+          setGuardState(false, `Invalid JSON syntax: ${parseErr.message}`);
+          return;
+        }
+
+        const spec = compileTemplate({ templateKey: key, dataAsJson: inputData });
+        specBox.textContent = JSON.stringify(spec, null, 2);
+
+        renderBox.innerHTML = "";
+        renderTemplate({
+          templateKey: key,
+          dataAsJson: inputData,
+          targetHtmlId: "renderBox"
+        });
+        setGuardState(true, `Blueprint "${key}" compiled and rendered with all contracts satisfied.`);
+      } catch (err) {
+        specBox.textContent = `Blocked: ${err.message}`;
+        renderBox.innerHTML = `<div class="text-danger small p-3 bg-danger-subtle rounded">Renderer halted: ${err.message}</div>`;
+        setGuardState(false, err.message);
+      }
+    };
+
+    const onTemplateChange = () => {
+      const key = templateSelector.value;
+      dataEditor.value = JSON.stringify(sampleDatasets[key] || {}, null, 2);
+      renderCurrentSelection();
+    };
+
+    templateSelector.addEventListener("change", onTemplateChange);
+    btnCompile.addEventListener("click", renderCurrentSelection);
+
+    btnTriggerGuard.addEventListener("click", () => {
+      dataEditor.value = JSON.stringify({ invalidKey: "Testing Guard Rejection" }, null, 2);
+      renderCurrentSelection();
+    });
+
+    btnResetData.addEventListener("click", () => {
+      onTemplateChange();
+    });
+
+    onTemplateChange();
+  </script>
+</body>
+
+</html>
+
