@@ -90,7 +90,20 @@ const templates = listTemplates();
 
 ---
 
-## 🧪 Isolated Test Suites
+## 🌐 Live GitHub Pages & CDN Documentation
+
+The highest version test suite (`v4`) and interactive compiler are published to GitHub Pages and run purely via CDN:
+
+- **Interactive Explorer (Live)**: [https://keshavsoft.github.io/json-hybrid-prototype/](https://keshavsoft.github.io/json-hybrid-prototype/)
+- **Tests v4 (4-Chapter Story)**: [https://keshavsoft.github.io/json-hybrid-prototype/tests/v4/](https://keshavsoft.github.io/json-hybrid-prototype/tests/v4/)
+  - Customer Form: [https://keshavsoft.github.io/json-hybrid-prototype/tests/v4/customerForm/](https://keshavsoft.github.io/json-hybrid-prototype/tests/v4/customerForm/)
+  - Sales Table: [https://keshavsoft.github.io/json-hybrid-prototype/tests/v4/salesTable/](https://keshavsoft.github.io/json-hybrid-prototype/tests/v4/salesTable/)
+  - Voucher Directory: [https://keshavsoft.github.io/json-hybrid-prototype/tests/v4/voucherDirectory/](https://keshavsoft.github.io/json-hybrid-prototype/tests/v4/voucherDirectory/)
+- **CDN Runtime**: [https://keshavsoft.github.io/json-hybrid-prototype/hybrid-runtime.js](https://keshavsoft.github.io/json-hybrid-prototype/hybrid-runtime.js)
+
+---
+
+## 🧪 Isolated Test Suites (Local Development)
 
 Run the local development server:
 
@@ -100,11 +113,14 @@ npx serve
 
 Then visit the suites in your browser:
 
-- **Interactive Explorer (Root)**: `http://localhost:62650/`
-- **Tests v1**: `http://localhost:62650/tests/v1/`
-- **Tests v2**: `http://localhost:62650/tests/v2/`
-- **Tests v3 (Modular)**: `http://localhost:62650/tests/v3/`
-- **Tests v4 (4-Chapter Story)**: `http://localhost:62650/tests/v4/`
-  - Customer Form: `http://localhost:62650/tests/v4/customerForm/`
-  - Sales Table: `http://localhost:62650/tests/v4/salesTable/`
-  - Voucher Directory: `http://localhost:62650/tests/v4/voucherDirectory/`
+- **Interactive Explorer (Root)**: `http://localhost:3000/`
+- **Docs & CDN Interactive Explorer**: `http://localhost:3000/docs/`
+- **Tests v4 (Docs CDN)**: `http://localhost:3000/docs/tests/v4/`
+  - Customer Form: `http://localhost:3000/docs/tests/v4/customerForm/`
+  - Sales Table: `http://localhost:3000/docs/tests/v4/salesTable/`
+  - Voucher Directory: `http://localhost:3000/docs/tests/v4/voucherDirectory/`
+- **Local Source Tests**:
+  - Tests v1: `http://localhost:3000/tests/v1/`
+  - Tests v2: `http://localhost:3000/tests/v2/`
+  - Tests v3: `http://localhost:3000/tests/v3/`
+  - Tests v4: `http://localhost:3000/tests/v4/`

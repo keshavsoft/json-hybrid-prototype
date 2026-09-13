@@ -21,10 +21,10 @@ import { buildDom, mountDom } from "./chapters/chapter4_realization/index.js";
  * @param {string} [options.targetHtmlId] - Target HTML element ID to mount into
  * @returns {HTMLElement|Array<HTMLElement>|Object} Materialized DOM element(s)
  */
-export const renderTemplate = ({ templateKey, dataAsJson = {}, targetHtmlId } = {}) => {
-    const localTemplateKey = templateKey;
-    const localDataAsJson = dataAsJson;
-    const localTargetHtmlId = targetHtmlId;
+export const renderTemplate = ({ templateKey, inKey, dataAsJson, inData, targetHtmlId, inTargetContainerId } = {}) => {
+    const localTemplateKey = templateKey || inKey;
+    const localDataAsJson = dataAsJson !== undefined ? dataAsJson : (inData !== undefined ? inData : {});
+    const localTargetHtmlId = targetHtmlId || inTargetContainerId;
 
     // Chapter 1: Identity
     const template = resolveTemplate({ templateKey: localTemplateKey });
@@ -48,13 +48,15 @@ export const renderTemplate = ({ templateKey, dataAsJson = {}, targetHtmlId } = 
  * Compiles a template and data into pure Spec JSON (Chapters 1 to 3).
  * 
  * @param {Object} options
- * @param {string} options.templateKey - Template key name
+ * @param {string} [options.templateKey] - Template key name
+ * @param {string} [options.inKey] - Legacy alias for template key name
  * @param {Object} [options.dataAsJson={}] - Contract-verified data payload
+ * @param {Object} [options.inData] - Legacy alias for data payload
  * @returns {Object|Array} Pure Spec JSON
  */
-export const compileTemplate = ({ templateKey, dataAsJson = {} } = {}) => {
-    const localTemplateKey = templateKey;
-    const localDataAsJson = dataAsJson;
+export const compileTemplate = ({ templateKey, inKey, dataAsJson, inData } = {}) => {
+    const localTemplateKey = templateKey || inKey;
+    const localDataAsJson = dataAsJson !== undefined ? dataAsJson : (inData !== undefined ? inData : {});
 
     // Chapter 1: Identity
     const template = resolveTemplate({ templateKey: localTemplateKey });
@@ -70,11 +72,12 @@ export const compileTemplate = ({ templateKey, dataAsJson = {} } = {}) => {
  * Supplies the pure guarded structure.json blueprint (Chapters 1 & 2).
  * 
  * @param {Object} options
- * @param {string} options.templateKey - Template key name
+ * @param {string} [options.templateKey] - Template key name
+ * @param {string} [options.inKey] - Legacy alias for template key name
  * @returns {Object|Array} Guarded structure blueprint
  */
-export const getStructure = ({ templateKey } = {}) => {
-    const localTemplateKey = templateKey;
+export const getStructure = ({ templateKey, inKey } = {}) => {
+    const localTemplateKey = templateKey || inKey;
 
     // Chapter 1: Identity
     const template = resolveTemplate({ templateKey: localTemplateKey });

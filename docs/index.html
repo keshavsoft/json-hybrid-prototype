@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>json-hybrid-prototype — Guarded Structure & Rendering</title>
+  <title>json-hybrid-prototype — Guarded Structure & Rendering (CDN Docs)</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
   <style>
     :root {
@@ -103,17 +103,13 @@
     <div class="app-header">
       <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
         <div>
-          <div class="d-flex align-items-center gap-2 mb-2">
-            <span class="badge bg-primary px-3 py-1.5 font-monospace">json-hybrid-prototype</span>
-            <a href="./docs/" class="badge bg-light text-dark text-decoration-none px-2 py-1">📚 Docs & CDN (v4)</a>
-            <a href="./tests/v1/" class="badge bg-secondary text-decoration-none px-2 py-1">Tests v1</a>
-            <a href="./tests/v2/" class="badge bg-info text-dark text-decoration-none px-2 py-1">Tests v2</a>
-            <a href="./tests/v3/" class="badge bg-success text-decoration-none px-2 py-1">Tests v3</a>
+          <div class="d-flex align-items-center gap-2 mb-2 flex-wrap">
+            <span class="badge bg-primary px-3 py-1.5 font-monospace">json-hybrid-prototype (Docs & CDN)</span>
             <a href="./tests/v4/" class="badge bg-warning text-dark text-decoration-none px-2 py-1">Tests v4 (4-Chapter Story)</a>
           </div>
-          <h2 class="h4 fw-bold mb-1">Guarded Template Registry & End-to-End Compiler</h2>
+          <h2 class="h4 fw-bold mb-1">Guarded Template Registry & End-to-End Compiler (Live CDN)</h2>
           <p class="text-secondary small mb-0 text-light opacity-75">
-            Supplying <code>structure.json</code> with pre-compilation guards, compiling via <code>json-to-spec</code>, rendering via <code>json-to-dom</code>.
+            Supplying <code>structure.json</code> with pre-compilation guards, compiling via <code>json-to-spec</code>, rendering via <code>json-to-dom</code> using CDN only.
           </p>
         </div>
         <div class="d-flex align-items-center gap-3">
@@ -146,7 +142,7 @@
             <span class="badge bg-secondary font-monospace" id="structureTagBadge">tag: div</span>
           </div>
           <div class="card-body">
-            <p class="small text-muted mb-2">Retrieved via <code>getStructure({ inKey })</code> with integrity guards.</p>
+            <p class="small text-muted mb-2">Retrieved via <code>getStructure({ templateKey })</code> with integrity guards.</p>
             <pre id="structureBox" class="code-view flex-grow-1">Loading structure...</pre>
           </div>
         </div>
@@ -177,7 +173,7 @@
             <span class="badge bg-success font-monospace">json-to-dom v27</span>
           </div>
           <div class="card-body">
-            <p class="small text-muted mb-2">Constructed from compiled spec via <code>buildSpecElement({ inSpec })</code>.</p>
+            <p class="small text-muted mb-2">Constructed from compiled spec via <code>renderTemplate({ templateKey, dataAsJson })</code>.</p>
             <div id="renderBox" class="flex-grow-1"></div>
           </div>
         </div>
@@ -187,16 +183,14 @@
 
   </div>
 
-  <!-- json-to-spec & json-to-dom from official CDN -->
+  <!-- Pure CDN imports: hybrid-runtime (which imports json-to-spec & json-to-dom via CDN) -->
   <script type="module">
-    import { compile } from "https://keshavsoft.github.io/json-to-spec/dist/v3/min.js";
-    import { buildSpecElement } from "https://keshavsoft.github.io/json-to-dom/dist/v27/min.js";
     import {
       listTemplates,
       getStructure,
       compileTemplate,
       renderTemplate
-    } from "./src/v1/index.js";
+    } from "./hybrid-runtime.js";
 
     const sampleDatasets = {
       customerForm: {
@@ -280,7 +274,7 @@
       
       try {
         // 1. Supply structure with guard
-        const structure = getStructure({ inKey: key });
+        const structure = getStructure({ templateKey: key });
         structureBox.textContent = JSON.stringify(structure, null, 2);
         structureTagBadge.textContent = Array.isArray(structure) ? `Array[${structure.length}]` : `<${structure.tagName}>`;
 
@@ -294,17 +288,15 @@
         }
 
         // 3. Compile with guards
-        const spec = compileTemplate({ inKey: key, inData: inputData, inCompile: compile });
+        const spec = compileTemplate({ templateKey: key, dataAsJson: inputData });
         specBox.textContent = JSON.stringify(spec, null, 2);
 
         // 4. Render to DOM
         renderBox.innerHTML = "";
-        const domNode = renderTemplate({
-          inKey: key,
-          inData: inputData,
-          inCompile: compile,
-          inBuildSpecElement: buildSpecElement,
-          inTargetContainerId: "renderBox"
+        renderTemplate({
+          templateKey: key,
+          dataAsJson: inputData,
+          targetHtmlId: "renderBox"
         });
         setGuardState(true, `Template "${key}" compiled and rendered with all contracts satisfied.`);
       } catch (err) {
@@ -335,3 +327,4 @@
 </body>
 
 </html>
+

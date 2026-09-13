@@ -9,7 +9,7 @@ export default defineConfig({
       formats: ["es", "umd"]
     },
     outDir: "docs",
-    emptyOutDir: true,
+    emptyOutDir: false,
     sourcemap: false
   }
 });
