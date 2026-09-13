@@ -1,4 +1,4 @@
-import { renderTemplate } from "../../../src/v4/index.js";
+import { renderTemplate } from "../../hybrid-runtime.js";
 
 const data = {
   toolbar: {
@@ -35,3 +35,4 @@ renderTemplate({
   dataAsJson: data,
   targetHtmlId: "app"
 });
+

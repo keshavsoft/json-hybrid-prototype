@@ -1,4 +1,4 @@
-import { renderTemplate } from "../../../hybrid-runtime.js";
+import { renderTemplate } from "../../hybrid-runtime.js";
 
 const data = {
   header: { title: "Customer Directory" },

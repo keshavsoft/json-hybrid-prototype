@@ -1,4 +1,4 @@
-import { renderTemplate } from "../../../src/v4/index.js";
+import { renderTemplate } from "../../src/v4/index.js";
 
 const data = {
   header: { title: "Customer Directory" },
