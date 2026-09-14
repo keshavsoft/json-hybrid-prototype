@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Entry Point API — json-hybrid-prototype</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0f172a;
+      --panel: #1e293b;
+      --panel-border: #334155;
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --accent: #38bdf8;
+    }
+
+    body {
+      margin: 0;
+      background: #f8fafc;
+      color: #0f172a;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    .app-navbar {
+      background: #0f172a;
+      border-bottom: 1px solid #334155;
+    }
+
+    pre.code-block {
+      margin: 0;
+      padding: 16px;
+      background: #0f172a;
+      color: #38bdf8;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 13px;
+      line-height: 1.5;
+      border-radius: 10px;
+      overflow-x: auto;
+    }
+
+    .api-card {
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 20px;
+      height: 100%;
+      box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Top Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark app-navbar py-2 px-3 sticky-top">
+    <div class="container-fluid" style="max-width: 1200px;">
+      <a class="navbar-brand d-flex align-items-center gap-2" href="./">
+        <span>🛡️</span>
+        <span class="fw-bold">json-hybrid-prototype</span>
+        <span class="badge bg-primary ms-1" style="font-size: 0.7rem;">v4</span>
+      </a>
+      
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navMenu">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-3">
+          <li class="nav-item">
+            <a class="nav-link text-light" href="./">&larr; Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-light" href="./story.html">📖 Story</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-light" href="./explorer/">🔬 Story Explorer</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active fw-semibold" href="./api.html">🚀 Entry Point API</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-light" href="./tests/">🧪 Tests</a>
+          </li>
+        </ul>
+
+        <div class="d-flex align-items-center gap-2">
+          <a href="./hybrid-runtime.js" target="_blank" class="btn btn-outline-info btn-sm">
+            📦 CDN Runtime
+          </a>
+          <a href="https://github.com/keshavsoft/json-hybrid-prototype" target="_blank" class="btn btn-outline-light btn-sm">
+            🐙 GitHub
+          </a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container py-4" style="max-width: 1000px;">
+    
+    <!-- Header -->
+    <div class="mb-4">
+      <span class="badge bg-primary font-monospace mb-2">Outside Caller Contract</span>
+      <h1 class="h3 fw-bold text-dark mb-1">🚀 Entry Point API Reference</h1>
+      <p class="text-muted small mb-0">
+        Clean caller interface consuming the hybrid runtime with zero <code>in-</code> prefixes.
+      </p>
+    </div>
+
+    <!-- Main Entry Point Card -->
+    <div class="card border rounded-4 shadow-sm bg-white p-4 mb-4">
+      <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
+        <div>
+          <h5 class="fw-bold mb-1 text-dark">Primary Caller Method: <code>renderTemplate()</code></h5>
+          <p class="text-muted small mb-0">Accepts 3 clean parameters to orchestrate the entire 4-chapter lifecycle and mount into DOM:</p>
+        </div>
+        <a href="./hybrid-runtime.js" target="_blank" class="btn btn-outline-secondary btn-sm">View Compiled Module</a>
+      </div>
+
+      <pre class="code-block mb-3">
+import { renderTemplate } from "https://keshavsoft.github.io/json-hybrid-prototype/hybrid-runtime.js";
+
+// 1. Prepare data matching the template blueprint contract
+const data = {
+  header: { title: "Customer Directory" },
+  customers: [
+    { name: "Asha Sharma", role: "Principal Architect" },
+    { name: "Karthik Verma", role: "Frontend Lead" }
+  ]
+};
+
+// 2. Orchestrates Chapters 1-4 and mounts directly into &lt;div id="app"&gt;&lt;/div&gt;
+renderTemplate({
+  templateKey: "customerForm",
+  dataAsJson: data,
+  targetHtmlId: "app"
+});</pre>
+
+      <div class="table-responsive">
+        <table class="table table-bordered table-sm align-middle small mb-0">
+          <thead class="table-light">
+            <tr>
+              <th style="width: 25%;">Parameter</th>
+              <th style="width: 20%;">Type</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>templateKey</code></td>
+              <td><code>string</code></td>
+              <td>Blueprint identifier registered in the template catalog (e.g. <code>"customerForm"</code>, <code>"salesTable"</code>).</td>
+            </tr>
+            <tr>
+              <td><code>dataAsJson</code></td>
+              <td><code>object</code></td>
+              <td>Dynamic data object satisfying the contract keys and arrays expected by the blueprint.</td>
+            </tr>
+            <tr>
+              <td><code>targetHtmlId</code></td>
+              <td><code>string</code></td>
+              <td>ID attribute of the DOM element where the materialized component will be mounted.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Secondary API Methods -->
+    <div class="mb-4">
+      <h5 class="fw-bold text-dark mb-3">Additional Utility Methods</h5>
+      <div class="row g-3">
+        <div class="col-md-4">
+          <div class="api-card">
+            <h6 class="fw-bold text-primary mb-2">1. compileTemplate</h6>
+            <p class="small text-muted mb-2">Executes Chapters 1 through 3 to produce pure Spec JSON without mounting to DOM.</p>
+            <code class="small text-dark d-block p-2 bg-light rounded border">compileTemplate({ templateKey, dataAsJson })</code>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="api-card">
+            <h6 class="fw-bold text-primary mb-2">2. getStructure</h6>
+            <p class="small text-muted mb-2">Retrieves the guarded structure blueprint for a given key (Chapters 1 &amp; 2).</p>
+            <code class="small text-dark d-block p-2 bg-light rounded border">getStructure({ templateKey })</code>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="api-card">
+            <h6 class="fw-bold text-primary mb-2">3. listTemplates</h6>
+            <p class="small text-muted mb-2">Discovers registered blueprints and metadata in the catalog.</p>
+            <code class="small text-dark d-block p-2 bg-light rounded border">listTemplates()</code>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Navigation Footer Links -->
+    <div class="d-flex justify-content-between align-items-center border-top pt-3">
+      <a href="./story.html" class="btn btn-outline-secondary btn-sm">&larr; Back to Story</a>
+      <div class="d-flex gap-2">
+        <a href="./tests/" class="btn btn-primary btn-sm">Next: Test Suites &rarr;</a>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

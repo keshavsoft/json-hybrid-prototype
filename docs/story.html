@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The 4-Chapter Story — json-hybrid-prototype</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0f172a;
+      --panel: #1e293b;
+      --panel-border: #334155;
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --accent: #38bdf8;
+    }
+
+    body {
+      margin: 0;
+      background: #f8fafc;
+      color: #0f172a;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    .app-navbar {
+      background: #0f172a;
+      border-bottom: 1px solid #334155;
+    }
+
+    .hero-section {
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      color: white;
+      border-radius: 16px;
+      padding: 36px 32px;
+      margin-bottom: 32px;
+      box-shadow: 0 10px 30px -5px rgba(15, 23, 42, 0.2);
+    }
+
+    .story-card {
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 14px;
+      padding: 24px;
+      height: 100%;
+      box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .story-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+    }
+
+    .chapter-num-badge {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-family: monospace;
+      display: inline-block;
+      margin-bottom: 12px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Top Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark app-navbar py-2 px-3 sticky-top">
+    <div class="container-fluid" style="max-width: 1200px;">
+      <a class="navbar-brand d-flex align-items-center gap-2" href="./">
+        <span>🛡️</span>
+        <span class="fw-bold">json-hybrid-prototype</span>
+        <span class="badge bg-primary ms-1" style="font-size: 0.7rem;">v4</span>
+      </a>
+      
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navMenu">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-3">
+          <li class="nav-item">
+            <a class="nav-link text-light" href="./">&larr; Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active fw-semibold" href="./story.html">📖 Story</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-light" href="./explorer/">🔬 Story Explorer</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-light" href="./api.html">🚀 Entry Point API</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-light" href="./tests/">🧪 Tests</a>
+          </li>
+        </ul>
+
+        <div class="d-flex align-items-center gap-2">
+          <a href="./hybrid-runtime.js" target="_blank" class="btn btn-outline-info btn-sm">
+            📦 CDN Runtime
+          </a>
+          <a href="https://github.com/keshavsoft/json-hybrid-prototype" target="_blank" class="btn btn-outline-light btn-sm">
+            🐙 GitHub
+          </a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container py-4" style="max-width: 1200px;">
+    
+    <!-- Hero Header -->
+    <div class="hero-section">
+      <div class="row align-items-center g-4">
+        <div class="col-lg-8">
+          <span class="badge bg-primary font-monospace mb-2 px-3 py-1.5">v4 Story-Driven Architecture</span>
+          <h1 class="display-6 fw-bold mb-2">The Story of a Data-Driven UI</h1>
+          <p class="text-light opacity-75 fs-6 mb-4" style="max-width: 680px;">
+            A declarative UI pipeline connecting guarded <code>structure.json</code> blueprints (HOW) with dynamic data (WHAT), compiling via <code>json-to-spec</code>, and materializing into living DOM via <code>json-to-dom</code>.
+          </p>
+          <div class="d-flex flex-wrap gap-2">
+            <a href="./explorer/" class="btn btn-primary px-3 fw-semibold">
+              🔬 Open Story Explorer &rarr;
+            </a>
+            <a href="./api.html" class="btn btn-outline-light px-3">
+              🚀 Entry Point Guide &rarr;
+            </a>
+            <a href="./tests/" class="btn btn-outline-warning px-3">
+              🧪 View Test Suites &rarr;
+            </a>
+          </div>
+        </div>
+        <div class="col-lg-4 text-center d-none d-lg-block">
+          <div class="p-3 bg-dark bg-opacity-50 rounded-4 border border-secondary border-opacity-25 text-start">
+            <div class="text-muted small mb-2 fw-semibold">THE 4-CHAPTER JOURNEY</div>
+            <div class="d-flex flex-column gap-2 small">
+              <div><span class="badge bg-primary me-2">Ch. 1</span> <strong>Identity:</strong> "Who are you?"</div>
+              <div><span class="badge bg-warning text-dark me-2">Ch. 2</span> <strong>The Gatekeeper:</strong> "Are you worthy?"</div>
+              <div><span class="badge bg-info text-dark me-2">Ch. 3</span> <strong>Transformation:</strong> Structure + Data -&gt; Spec</div>
+              <div><span class="badge bg-success me-2">Ch. 4</span> <strong>Realization:</strong> Spec -&gt; Living DOM</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- The 4 Chapters Cards -->
+    <div class="mb-5">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+          <h2 class="h4 fw-bold text-dark mb-1">📖 The 4 Chapters</h2>
+          <p class="text-muted small mb-0">The narrative lifecycle of turning JSON blueprints into living DOM.</p>
+        </div>
+        <a href="./explorer/" class="btn btn-outline-primary btn-sm">Open Interactive Explorer &rarr;</a>
+      </div>
+
+      <div class="row g-3">
+        
+        <!-- Chapter 1 -->
+        <div class="col-lg-3 col-md-6">
+          <div class="story-card">
+            <span class="chapter-num-badge bg-primary text-white">CHAPTER 1</span>
+            <h5 class="fw-bold text-dark mb-2">Identity</h5>
+            <p class="text-muted small mb-3">
+              <em>"Who are you?"</em> Resolves the blueprint from the catalog by <code>templateKey</code> and validates its existence.
+            </p>
+            <ul class="list-unstyled small text-secondary mb-0">
+              <li class="mb-1">&bull; Curated blueprint catalog</li>
+              <li class="mb-1">&bull; Key existence verification</li>
+              <li>&bull; Declarative HOW blueprint</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Chapter 2 -->
+        <div class="col-lg-3 col-md-6">
+          <div class="story-card">
+            <span class="chapter-num-badge bg-warning text-dark">CHAPTER 2</span>
+            <h5 class="fw-bold text-dark mb-2">The Gatekeeper</h5>
+            <p class="text-muted small mb-3">
+              <em>"Are you worthy to enter?"</em> Validates data payload against required contract keys/arrays and guards blueprint schema.
+            </p>
+            <ul class="list-unstyled small text-secondary mb-0">
+              <li class="mb-1">&bull; Required key &amp; array guards</li>
+              <li class="mb-1">&bull; Void tag (&lt;input&gt;, &lt;img&gt;) guard</li>
+              <li>&bull; Pre-compilation rejection</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Chapter 3 -->
+        <div class="col-lg-3 col-md-6">
+          <div class="story-card">
+            <span class="chapter-num-badge bg-info text-dark">CHAPTER 3</span>
+            <h5 class="fw-bold text-dark mb-2">Transformation</h5>
+            <p class="text-muted small mb-3">
+              Compiles the guarded blueprint and dynamic data into pure Spec JSON via <code>json-to-spec v3</code>.
+            </p>
+            <ul class="list-unstyled small text-secondary mb-0">
+              <li class="mb-1">&bull; HOW (structure) + WHAT (data)</li>
+              <li class="mb-1">&bull; Iterations &amp; string interpolations</li>
+              <li>&bull; Pure Spec JSON output</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Chapter 4 -->
+        <div class="col-lg-3 col-md-6">
+          <div class="story-card">
+            <span class="chapter-num-badge bg-success text-white">CHAPTER 4</span>
+            <h5 class="fw-bold text-dark mb-2">Realization</h5>
+            <p class="text-muted small mb-3">
+              Breathes life into Spec JSON by constructing living interactive DOM elements via <code>json-to-dom v27</code>.
+            </p>
+            <ul class="list-unstyled small text-secondary mb-0">
+              <li class="mb-1">&bull; Pure DOM materialization</li>
+              <li class="mb-1">&bull; Event &amp; action attachments</li>
+              <li>&bull; Mounts directly to <code>targetHtmlId</code></li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Navigation Footer Links -->
+    <div class="d-flex justify-content-between align-items-center border-top pt-3">
+      <a href="./" class="btn btn-outline-secondary btn-sm">&larr; Back to Home</a>
+      <div class="d-flex gap-2">
+        <a href="./api.html" class="btn btn-primary btn-sm">Next: Entry Point API &rarr;</a>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
